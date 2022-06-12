@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,13 +47,17 @@ public class OperatorController {
 
     @GetMapping("/list/{id}")
     public ResponseEntity<Operator> getById(@PathVariable Long id){
-        Operator op = oS.findById(id).get();
+        Operator op = null;
+        if(oS.findById(id) != null){
+            op = oS.findById(id).get();
+        }
 
         if(op != null){
             return ResponseEntity.ok().body(op);
         }
         return ResponseEntity.notFound().build();
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<Operator> createOperator(@RequestBody Operator operator){
@@ -63,6 +68,7 @@ public class OperatorController {
         return ResponseEntity.badRequest().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<Operator> updateOperator(@PathVariable Long id, @RequestBody Operator operator){
         if(operator != null){
@@ -72,6 +78,7 @@ public class OperatorController {
         return ResponseEntity.badRequest().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteOperator(@PathVariable Long id){
         System.out.println(id);
