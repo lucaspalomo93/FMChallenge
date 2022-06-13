@@ -37,6 +37,7 @@ public class OperatorController {
             opojo.setName(op.getName());
             opojo.setSurname(op.getSurname());
             opojo.setStatus(op.getStatus());
+            opojo.setUsername(op.getUserName());
             opojo.setCreationDate(op.getCreationDate());
             opojo.setLastLoginDate(op.getLastLoginDate());
             opPojoList.add(opojo);
