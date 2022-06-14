@@ -9,7 +9,7 @@ import com.challenge.challenge.models.Operator;
 public interface IOperatorRepository extends JpaRepository<Operator, Long>{
     
 
-    public Operator findByUserName(String username);
+    Operator findByUserName(String username);
 
-    public boolean existsByUserName(String username);
+    boolean existsByUserName(String username);
 }

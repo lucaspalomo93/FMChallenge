@@ -15,6 +15,8 @@ public class OperatorPOJO {
 
     private String surname;
 
+    private String username;
+
     private int status;
 
     private Date CreationDate;

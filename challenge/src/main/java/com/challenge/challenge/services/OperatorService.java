@@ -5,14 +5,23 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.challenge.challenge.models.Operator;
+import com.challenge.challenge.models.Role;
 import com.challenge.challenge.repositories.IOperatorRepository;
+import com.challenge.challenge.repositories.IRoleRepository;
 
 @Service
 public class OperatorService {
     
+    @Autowired
+    private PasswordEncoder pE;
+
+    @Autowired
+    private IRoleRepository rR;
+
     @Autowired
     private IOperatorRepository oR;
 
@@ -28,9 +37,16 @@ public class OperatorService {
     }
 
     public Operator save(Operator operator){
+
+        Role role = rR.findByName("ROLE_USER");
+
         if(operator != null){
             if(!oR.existsByUserName(operator.getUserName())){
                 operator.setCreationDate(new Date(System.currentTimeMillis()));
+                String newPass = pE.encode(operator.getPassword());
+                operator.setPassword(newPass);
+                operator.setRole(role);
+                operator.setStatus(1);
                 return oR.save(operator);
             }
         }
@@ -44,7 +60,8 @@ public class OperatorService {
             oldOp.setName(operator.getName());
             oldOp.setSurname(operator.getSurname());
             oldOp.setUserName(operator.getUserName());
-            oldOp.setPassword(operator.getPassword());
+            String newPass = pE.encode(operator.getPassword());
+            oldOp.setPassword(newPass);
             oldOp.setStatus(operator.getStatus());
 
             oR.save(oldOp);
