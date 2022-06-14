@@ -46,6 +46,7 @@ public class OperatorService {
                 String newPass = pE.encode(operator.getPassword());
                 operator.setPassword(newPass);
                 operator.setRole(role);
+                operator.setStatus(1);
                 return oR.save(operator);
             }
         }
